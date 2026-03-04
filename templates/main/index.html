@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Abdulloh | Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #0f172a;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #38bdf8;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero-text h2 {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .hero-text span {
+            color: #38bdf8;
+        }
+
+        .hero-text p {
+            margin-bottom: 25px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #38bdf8;
+            color: black;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: white;
+        }
+
+        .hero-img img {
+            width: 350px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(56,189,248,0.5);
+        }
+
+        @media(max-width: 900px){
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 120px;
+            }
+
+            .hero-img {
+                margin-top: 40px;
+            }
+
+            .hero-text h2 {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Abdulloh.dev</h1>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Projects</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-text">
+        <h2>Hello, I'm <span>Abdulloh</span></h2>
+        <p>
+            I'm a Django & Flutter Developer. I build modern, responsive 
+            and user-friendly web & mobile applications.
+        </p>
+
+        <!-- O‘ZGARTIRILGAN TUGMA -->
+        <a href="https://github.com/Akramov-dev-code/Django" 
+           class="btn" 
+           target="_blank">
+           View My Work
+        </a>
+    </div>
+
+    <div class="hero-img">
+        <img src="https://via.placeholder.com/350x400" alt="profile image">
+    </div>
+</section>
+
+</body>
+</html>
