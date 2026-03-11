@@ -6,7 +6,7 @@ class Student(models.Model):
     is_active = models.BooleanField(default=True)
     birth_date = models.DateField(null=True, blank=True)
     
-    courses = models.ManyToManyField("main.Cource", related_name="courses", blank=True)
+    courses = models.ManyToManyField("main.Course", related_name="courses", blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -15,14 +15,14 @@ class Student(models.Model):
     def __str__(self):
         return f"Student : {self.name} - # {self.id}"
     
-    
+        
     class Meta:
         verbose_name = "O'quvchi"
         verbose_name_plural = "O'quvchilar"
         ordering = ["id"]
     
     
-class Cource(models.Model):
+class Course(models.Model):
     title = models.CharField(max_length=255)
     price = models.PositiveIntegerField(default=0)
     discount_type_choices = (

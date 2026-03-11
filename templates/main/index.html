@@ -1,36 +1,611 @@
-{% extends "main/base.html" %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kurslar — Abdulloh-boy Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-{% block title %}
+    :root {
+      --ink:    #0f0e17;
+      --paper:  #fffcf5;
+      --gold:   #e8a020;
+      --amber:  #f5c842;
+      --cream:  #fdf3dc;
+      --muted:  #7a7060;
+      --card-bg:#ffffff;
+      --radius: 18px;
+      --shadow: 0 4px 32px rgba(15,14,23,0.08);
+    }
 
-Abdulloh motivator
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
 
-{% endblock %}
+    /* ── HERO ─────────────────────────────── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: var(--ink);
+      padding: 90px 0 80px;
+      margin-bottom: 56px;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(232,160,32,.22) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(245,200,66,.12) 0%, transparent 60%);
+    }
+    .hero-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(232,160,32,.12);
+      pointer-events: none;
+    }
+    .hero-circle:nth-child(1){ width:340px;height:340px;top:-120px;left:-80px; }
+    .hero-circle:nth-child(2){ width:240px;height:240px;bottom:-70px;right:-50px; }
+    .hero-inner {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(232,160,32,.15);
+      border: 1px solid rgba(232,160,32,.35);
+      color: var(--amber);
+      font-family: 'Syne', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 50px;
+      margin-bottom: 26px;
+      animation: fadeUp .6s ease both;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      margin-bottom: 18px;
+      animation: fadeUp .6s .1s ease both;
+    }
+    .hero h1 span { color: var(--amber); }
+    .hero p {
+      color: rgba(255,255,255,.5);
+      font-size: 1.1rem;
+      font-weight: 300;
+      max-width: 520px;
+      margin: 0 auto;
+      animation: fadeUp .6s .2s ease both;
+    }
 
-{% block content %}
+    /* ── LAYOUT ──────────────────────────── */
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
 
-<h1> Bizda hamma kurslar </h1>
+    /* ── FILTER ──────────────────────────── */
+    .filter-bar {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 30px 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(232,160,32,.14);
+      margin-bottom: 48px;
+    }
+    .filter-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 2fr auto;
+      gap: 18px;
+      align-items: end;
+    }
+    @media(max-width:768px){
+      .filter-row { grid-template-columns: 1fr 1fr; }
+      .search-wrap, .submit-wrap { grid-column: 1 / -1; }
+    }
+    .filter-label {
+      font-family: 'Syne', sans-serif;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .filter-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #e8e2d6;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      color: var(--ink);
+      background: var(--cream);
+      transition: border-color .25s, box-shadow .25s;
+      outline: none;
+    }
+    .filter-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(232,160,32,.15);
+      background: #fff;
+    }
+    .search-wrap { position: relative; }
+    .search-icon-inner {
+      position: absolute;
+      left: 14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-size: .9rem;
+      pointer-events: none;
+    }
+    .search-wrap .filter-input { padding-left: 40px; }
+    .filter-btn {
+      width: 100%;
+      padding: 13px 28px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Syne', sans-serif;
+      font-size: .9rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: background .25s, transform .2s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover { background: #2a2840; transform: translateY(-2px); }
 
-<form method="get">
-    <h3>Filtering</h3>
-    <label for="price_from">Boshlanish narxi</label>
-    <input type="number" min="0" name="price_from">
+    /* ── SECTION HEAD ────────────────────── */
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .section-head h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+    .section-count {
+      font-size: .85rem;
+      color: var(--muted);
+      background: var(--cream);
+      padding: 5px 16px;
+      border-radius: 50px;
+      border: 1px solid #e8e2d6;
+    }
 
-    <label for="price_to">Tugash narxi</label>
-    <input type="number" min="0" name="price_to">
-    <button type="submit">Filterlash</button>
+    /* ── GRID ────────────────────────────── */
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
 
-    <h3>Qidiruv</h3>
-    <label for="search">Yozing</label>
-    <input type="text" name="search" placeholder="Kurs nomini kiriting" value="{{search}}">
-    <button type="submit">Qidirish</button>
-</form>
+    /* ── CARD ────────────────────────────── */
+    .course-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(232,160,32,.12);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform .3s ease, box-shadow .3s ease;
+      animation: fadeUp .5s ease both;
+    }
+    .course-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 20px 50px rgba(15,14,23,.13);
+    }
+    .card-accent {
+      height: 5px;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--amber) 100%);
+    }
+    .card-top {
+      padding: 22px 22px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .card-icon {
+      width: 46px; height: 46px;
+      background: var(--cream);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem;
+      color: var(--gold);
+      flex-shrink: 0;
+      border: 1px solid rgba(232,160,32,.2);
+    }
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.35;
+      padding-top: 4px;
+    }
+    .card-body {
+      padding: 4px 22px 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .price-main {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .price-unit {
+      font-size: .82rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .discount-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: linear-gradient(135deg, #fff3cc 0%, #ffe58a 100%);
+      color: #7a5800;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 5px 13px;
+      border-radius: 50px;
+      border: 1px solid rgba(232,160,32,.4);
+      margin-bottom: 16px;
+      animation: shimmer 2.5s infinite;
+    }
+    @keyframes shimmer {
+      0%,100% { box-shadow: 0 0 0 0 rgba(232,160,32,0); }
+      50%      { box-shadow: 0 0 0 5px rgba(232,160,32,.18); }
+    }
+    .card-btn {
+      margin-top: auto;
+      display: block;
+      width: 100%;
+      padding: 13px;
+      text-align: center;
+      background: transparent;
+      border: 1.5px solid var(--ink);
+      border-radius: 12px;
+      font-family: 'Syne', sans-serif;
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: .03em;
+      transition: background .25s, color .25s, transform .15s;
+      cursor: pointer;
+    }
+    .card-btn:hover {
+      background: var(--ink);
+      color: #fff;
+      transform: translateY(-1px);
+    }
 
-<ul>
-    {% for kurs in courses %}
-    <li>{{kurs.title}} - {{kurs.price}} {% if kurs.discount %}- {{kurs.discount}} {% if kurs.discount_type == 'percent' %} % {% else %} so'm {% endif %} chegirma bor{% endif %} </li>
-    {% empty %}
-    <h2>Hech narsa topilmadi</h2>
-    {% endfor %}
-</ul>
+    /* ── EMPTY ───────────────────────────── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 24px;
+      background: var(--cream);
+      border-radius: var(--radius);
+      border: 1.5px dashed #d9cfba;
+    }
+    .empty-icon {
+      width: 80px; height: 80px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+      color: var(--gold);
+      box-shadow: var(--shadow);
+    }
+    .empty h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .empty p { color: var(--muted); font-size: .95rem; line-height: 1.7; }
 
-{% endblock %}
+    /* ── ANIMATIONS ──────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .course-card:nth-child(1){animation-delay:.05s}
+    .course-card:nth-child(2){animation-delay:.10s}
+    .course-card:nth-child(3){animation-delay:.15s}
+    .course-card:nth-child(4){animation-delay:.20s}
+    .course-card:nth-child(5){animation-delay:.25s}
+    .course-card:nth-child(6){animation-delay:.30s}
+    .course-card:nth-child(7){animation-delay:.35s}
+    .course-card:nth-child(8){animation-delay:.40s}
+    .course-card:nth-child(9){animation-delay:.45s}
+
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:var(--paper)}
+    ::-webkit-scrollbar-thumb{background:#d6cebb;border-radius:10px}
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-circle"></div>
+  <div class="hero-circle"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <i class="fas fa-graduation-cap"></i> Abdulloh-boy Academy
+    </div>
+    <h1>Bizning <span>Kurslar</span></h1>
+    <p>Eng sara va sifatli kurslar — faqat siz uchun. Bilim olish uchun eng yaxshi joy.</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <div class="filter-row">
+      <div>
+        <label class="filter-label" for="price_from">
+          <i class="fas fa-arrow-down" style="color:var(--gold);margin-right:4px"></i>
+          Narxdan (so'm)
+        </label>
+        <input type="number" class="filter-input" min="0" id="price_from" placeholder="0">
+      </div>
+      <div>
+        <label class="filter-label" for="price_to">
+          <i class="fas fa-arrow-up" style="color:var(--gold);margin-right:4px"></i>
+          Narxgacha (so'm)
+        </label>
+        <input type="number" class="filter-input" min="0" id="price_to" placeholder="∞">
+      </div>
+      <div class="search-wrap">
+        <label class="filter-label" for="search">
+          <i class="fas fa-search" style="color:var(--gold);margin-right:4px"></i>
+          Kurs nomi bo'yicha qidirish
+        </label>
+        <i class="fas fa-search search-icon-inner"></i>
+        <input type="text" class="filter-input" id="search" placeholder="Kurs nomini kiriting...">
+      </div>
+      <div class="submit-wrap">
+        <button class="filter-btn" onclick="filterCourses()">
+          <i class="fas fa-sliders-h"></i> Filtrlash
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION HEAD -->
+  <div class="section-head">
+    <h2>Barcha kurslar</h2>
+    <span class="section-count" id="course-count">
+      <i class="fas fa-layer-group" style="color:var(--gold);margin-right:5px"></i>
+      <span id="count-num">9</span> ta kurs
+    </span>
+  </div>
+
+  <!-- GRID -->
+  <div class="course-grid" id="courseGrid">
+
+    <div class="course-card" data-title="Python dasturlash" data-price="350000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-code"></i></div>
+        <div class="card-title">Python dasturlash</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">350 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <span class="discount-pill"><i class="fas fa-tag"></i> 20% chegirma</span>
+        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+    <div class="course-card" data-title="Web dasturlash" data-price="420000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-globe"></i></div>
+        <div class="card-title">Web dasturlash (HTML, CSS, JS)</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">420 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <a href="#" class="card-btn" style="margin-top:38px">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+    <div class="course-card" data-title="Grafik dizayn" data-price="280000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-paint-brush"></i></div>
+        <div class="card-title">Grafik dizayn (Photoshop, Figma)</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">280 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <span class="discount-pill"><i class="fas fa-tag"></i> 50 000 so'm chegirma</span>
+        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+    <div class="course-card" data-title="SMM marketing" data-price="190000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
+        <div class="card-title">SMM va Digital Marketing</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">190 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <span class="discount-pill"><i class="fas fa-tag"></i> 15% chegirma</span>
+        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+    <div class="course-card" data-title="Ingliz tili" data-price="250000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-language"></i></div>
+        <div class="card-title">Ingliz tili (A1 dan C1 gacha)</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">250 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <a href="#" class="card-btn" style="margin-top:38px">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+    <div class="course-card" data-title="Mobil dasturlash" data-price="500000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-mobile-alt"></i></div>
+        <div class="card-title">Mobil dasturlash (Flutter)</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">500 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <span class="discount-pill"><i class="fas fa-tag"></i> 30% chegirma</span>
+        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+    <div class="course-card" data-title="Video montaj" data-price="160000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-film"></i></div>
+        <div class="card-title">Video montaj (Premiere Pro)</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">160 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <a href="#" class="card-btn" style="margin-top:38px">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+    <div class="course-card" data-title="Biznes va tadbirkorlik" data-price="390000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+        <div class="card-title">Biznes va Tadbirkorlik asoslari</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">390 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <span class="discount-pill"><i class="fas fa-tag"></i> 10% chegirma</span>
+        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+    <div class="course-card" data-title="3D modellashtirish" data-price="320000">
+      <div class="card-accent"></div>
+      <div class="card-top">
+        <div class="card-icon"><i class="fas fa-cube"></i></div>
+        <div class="card-title">3D Modellashtirish (Blender)</div>
+      </div>
+      <div class="card-body">
+        <div class="price-row">
+          <span class="price-main">320 000</span>
+          <span class="price-unit">so'm</span>
+        </div>
+        <a href="#" class="card-btn" style="margin-top:38px">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+</div><!-- /wrap -->
+
+<script>
+  function filterCourses() {
+    const from   = parseFloat(document.getElementById('price_from').value) || 0;
+    const to     = parseFloat(document.getElementById('price_to').value)   || Infinity;
+    const search = document.getElementById('search').value.toLowerCase().trim();
+    const cards  = document.querySelectorAll('.course-card');
+    const grid   = document.getElementById('courseGrid');
+
+    // remove old empty state
+    const old = grid.querySelector('.empty');
+    if (old) old.remove();
+
+    let visible = 0;
+    cards.forEach(card => {
+      const price = parseFloat(card.dataset.price);
+      const title = card.dataset.title.toLowerCase();
+      const show  = price >= from && price <= to && title.includes(search);
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+
+    document.getElementById('count-num').textContent = visible;
+
+    if (visible === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.innerHTML = `
+        <div class="empty-icon"><i class="fas fa-search"></i></div>
+        <h2>Hech narsa topilmadi</h2>
+        <p>Qidiruv so'rovingiz bo'yicha kurslar mavjud emas.<br>Boshqa kalit so'z yoki narx oralig'ini sinab ko'ring.</p>
+      `;
+      grid.appendChild(empty);
+    }
+  }
+
+  // Enter tugmasi bilan ham qidirish
+  document.getElementById('search').addEventListener('keydown', e => {
+    if (e.key === 'Enter') filterCourses();
+  });
+</script>
+
+</body>
+</html>
