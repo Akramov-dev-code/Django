@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>To'lov — {{ course.title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root { --ink: #0f0e17; --paper: #fffcf5; --gold: #e8a020; }
+        body { background: var(--paper); font-family: 'DM Sans', sans-serif; margin: 0; }
+        .checkout-container { max-width: 600px; margin: 50px auto; padding: 0 20px; }
+        
+        .checkout-box { background: #fff; padding: 40px; border-radius: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        h2 { font-family: 'Syne', sans-serif; margin-bottom: 30px; text-align: center; }
+
+        .order-summary {
+            background: #fdf3dc; padding: 20px; border-radius: 12px; margin-bottom: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--ink); }
+        input {
+            width: 100%; padding: 14px; border: 1.5px solid #e8e2d6; border-radius: 12px;
+            box-sizing: border-box; font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(232,160,32,0.1); }
+
+        .pay-btn {
+            width: 100%; background: var(--gold); color: #fff; border: none; padding: 16px;
+            border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+            margin-top: 10px;
+        }
+        .pay-btn:hover { background: #d18d10; transform: translateY(-2px); }
+        
+        .security-tag { text-align: center; color: #7a7060; font-size: 0.8rem; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="checkout-box">
+            <h2>Ro'yxatdan o'tish</h2>
+            
+            <div class="order-summary">
+                <div>
+                    <div style="font-weight: 700;">{{ course.title }}</div>
+                    <div style="font-size: 0.8rem; color: var(--muted);">Kursga kirish</div>
+                </div>
+                <div style="font-weight: 800; font-size: 1.2rem;">{{ course.price }} so'm</div>
+            </div>
+
+            <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label>To'liq ismingiz</label>
+        <input type="text" name="full_name" placeholder="Masalan: Abdulloh Alimov" required>
+    </div>
+    
+    <div class="form-group">
+        <label>Telefon raqamingiz</label>
+        <input type="tel" name="phone" placeholder="+998 90 123 45 67" required>
+    </div>
+
+    <div class="form-group">
+        <label>Telegram</label>
+        <input type="text" name="telegram" placeholder="@username">
+    </div>
+
+    <button type="submit" class="pay-btn">Sotib olish</button>
+</form>
+            <div class="security-tag">
+                <i class="fas fa-lock"></i> Ma'lumotlaringiz xavfsiz saqlanadi
+            </div>
+        </div>
+    </div>
+</body>
+</html>

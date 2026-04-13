@@ -1,7 +1,7 @@
 from django.contrib import admin
-from main.models import Student, Course
+from main.models import Students, Course
 
-admin.site.register(Student)
+admin.site.register(Students)
 
 
 class CourseAdmin(admin.ModelAdmin):

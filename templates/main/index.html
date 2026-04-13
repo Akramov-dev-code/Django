@@ -359,10 +359,90 @@
     ::-webkit-scrollbar{width:6px}
     ::-webkit-scrollbar-track{background:var(--paper)}
     ::-webkit-scrollbar-thumb{background:#d6cebb;border-radius:10px}
+    /* Dashboard tugmasi stili */
+.dashboard-link {
+    background: var(--gold);
+    color: var(--ink) !important;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(232, 160, 32, 0.3);
+    transition: all 0.3s ease;
+}
+
+.dashboard-link:hover {
+    transform: translateY(-3px);
+    background: var(--amber);
+    box-shadow: 0 6px 20px rgba(232, 160, 32, 0.5);
+}
+
+.auth-minimal-link {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-family: 'Syne';
+    transition: 0.3s;
+}
+
+.auth-minimal-link:hover {
+    color: var(--gold);
+}
+
+/* Hero qismini tugmalar bilan to'g'ri ishlashi uchun nisbiy qilish */
+.hero {
+    position: relative;
+}
+.auth-minimal-link {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    transition: 0.3s; 
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.auth-minimal-link:hover {
+    color: var(--amber);
+    background: rgba(255,255,255,0.2);
+}
   </style>
 </head>
 <body>
+{% if user.is_superuser %}
+<div style="position: absolute; top: 20px; right: 24px; z-index: 1000;">
+    <a href="{% url 'dashboard' %}" class="dashboard-link">
+        <i class="fas fa-user-shield"></i> Dashboard'ga o'tish
+    </a>
+</div>
+{% endif %}
 
+<div style="position: absolute; top: 20px; left: 24px; z-index: 1000; display: flex; align-items: center; gap: 15px;">
+    {% if user.is_authenticated %}
+        <span style="color: var(--gold); font-size: 0.9rem; font-family: 'Syne'; font-weight: 700;">
+            <i class="fas fa-user-circle"></i> {{ user.username }}
+        </span>
+        
+        <a href="{% url 'logout' %}" class="auth-minimal-link" style="background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 8px;">
+            <i class="fas fa-sign-out-alt"></i> Chiqish
+        </a>
+    {% else %}
+        <a href="{% url 'login' %}" class="auth-minimal-link">
+            <i class="fas fa-sign-in-alt"></i> Kirish
+        </a>
+        <a href="{% url 'register' %}" class="auth-minimal-link" style="margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 10px;">
+            Ro'yxatdan o'tish
+        </a>
+    {% endif %}
+</div>
 <!-- HERO -->
 <div class="hero">
   <div class="hero-circle"></div>
@@ -375,196 +455,81 @@
     <p>Eng sara va sifatli kurslar — faqat siz uchun. Bilim olish uchun eng yaxshi joy.</p>
   </div>
 </div>
+<div class="filter-bar">
+    <form method="GET" action=""> <div class="filter-row">
+            <div>
+                <label class="filter-label" for="price_from">
+                    <i class="fas fa-arrow-down" style="color:var(--gold);margin-right:4px"></i>
+                    Narxdan (so'm)
+                </label>
+                <input type="number" name="price_from" class="filter-input" id="price_from" value="{{ price_from }}" placeholder="0">
+            </div>
+            <div>
+                <label class="filter-label" for="price_to">
+                    <i class="fas fa-arrow-up" style="color:var(--gold);margin-right:4px"></i>
+                    Narxgacha (so'm)
+                </label>
+                <input type="number" name="price_to" class="filter-input" id="price_to" value="{{ price_to }}" placeholder="∞">
+            </div>
+            <div class="search-wrap">
+                <label class="filter-label" for="search">
+                    <i class="fas fa-search" style="color:var(--gold);margin-right:4px"></i>
+                    Kurs nomi bo'yicha qidirish
+                </label>
+                <i class="fas fa-search search-icon-inner"></i>
+                <input type="text" name="search" class="filter-input" id="search" value="{{ search_query }}" placeholder="Kurs nomini kiriting...">
+            </div>
+            <div class="submit-wrap">
+                <button type="submit" class="filter-btn">
+                    <i class="fas fa-sliders-h"></i> Filtrlash
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
 
-<div class="wrap">
-
-  <!-- FILTER -->
-  <div class="filter-bar">
-    <div class="filter-row">
-      <div>
-        <label class="filter-label" for="price_from">
-          <i class="fas fa-arrow-down" style="color:var(--gold);margin-right:4px"></i>
-          Narxdan (so'm)
-        </label>
-        <input type="number" class="filter-input" min="0" id="price_from" placeholder="0">
-      </div>
-      <div>
-        <label class="filter-label" for="price_to">
-          <i class="fas fa-arrow-up" style="color:var(--gold);margin-right:4px"></i>
-          Narxgacha (so'm)
-        </label>
-        <input type="number" class="filter-input" min="0" id="price_to" placeholder="∞">
-      </div>
-      <div class="search-wrap">
-        <label class="filter-label" for="search">
-          <i class="fas fa-search" style="color:var(--gold);margin-right:4px"></i>
-          Kurs nomi bo'yicha qidirish
-        </label>
-        <i class="fas fa-search search-icon-inner"></i>
-        <input type="text" class="filter-input" id="search" placeholder="Kurs nomini kiriting...">
-      </div>
-      <div class="submit-wrap">
-        <button class="filter-btn" onclick="filterCourses()">
-          <i class="fas fa-sliders-h"></i> Filtrlash
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SECTION HEAD -->
-  <div class="section-head">
+<div class="section-head">
     <h2>Barcha kurslar</h2>
-    <span class="section-count" id="course-count">
-      <i class="fas fa-layer-group" style="color:var(--gold);margin-right:5px"></i>
-      <span id="count-num">9</span> ta kurs
+    <span class="section-count">
+        <i class="fas fa-layer-group" style="color:var(--gold);margin-right:5px"></i>
+        <span>{{ count }}</span> ta kurs
     </span>
-  </div>
+</div>
 
-  <!-- GRID -->
-  <div class="course-grid" id="courseGrid">
-
-    <div class="course-card" data-title="Python dasturlash" data-price="350000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-code"></i></div>
-        <div class="card-title">Python dasturlash</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">350 000</span>
-          <span class="price-unit">so'm</span>
+<div class="course-grid" id="courseGrid">
+    {% for course in courses %}
+    <div class="course-card">
+        <div class="card-accent"></div>
+        <div class="card-top">
+            <div class="card-icon"><i class="{{ course.icon_class }}"></i></div>
+            <div class="card-title">{{ course.title }}</div>
         </div>
-        <span class="discount-pill"><i class="fas fa-tag"></i> 20% chegirma</span>
-        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
+        <div class="card-body">
+    <div class="price-row">
+        <span class="price-main">{{ course.price }}</span>
+        <span class="price-unit">so'm</span>
     </div>
-
-    <div class="course-card" data-title="Web dasturlash" data-price="420000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-globe"></i></div>
-        <div class="card-title">Web dasturlash (HTML, CSS, JS)</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">420 000</span>
-          <span class="price-unit">so'm</span>
-        </div>
-        <a href="#" class="card-btn" style="margin-top:38px">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
+    
+    {% if course.discount_text %}
+        <span class="discount-pill"><i class="fas fa-tag"></i> {{ course.discount_text }}</span>
+        <a href="{% url 'course_detail' course.pk %}" class="card-btn">
+            Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i>
+        </a>
+    {% else %}
+        <a href="{% url 'course_detail' course.pk %}" class="card-btn" style="margin-top:38px">
+            Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i>
+        </a>
+    {% endif %}
+</div>
     </div>
-
-    <div class="course-card" data-title="Grafik dizayn" data-price="280000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-paint-brush"></i></div>
-        <div class="card-title">Grafik dizayn (Photoshop, Figma)</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">280 000</span>
-          <span class="price-unit">so'm</span>
-        </div>
-        <span class="discount-pill"><i class="fas fa-tag"></i> 50 000 so'm chegirma</span>
-        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
+    {% empty %}
+    <div class="empty">
+        <div class="empty-icon"><i class="fas fa-search"></i></div>
+        <h2>Hech narsa topilmadi</h2>
+        <p>Qidiruv so'rovingiz bo'yicha kurslar mavjud emas.</p>
     </div>
-
-    <div class="course-card" data-title="SMM marketing" data-price="190000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-bullhorn"></i></div>
-        <div class="card-title">SMM va Digital Marketing</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">190 000</span>
-          <span class="price-unit">so'm</span>
-        </div>
-        <span class="discount-pill"><i class="fas fa-tag"></i> 15% chegirma</span>
-        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
-    </div>
-
-    <div class="course-card" data-title="Ingliz tili" data-price="250000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-language"></i></div>
-        <div class="card-title">Ingliz tili (A1 dan C1 gacha)</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">250 000</span>
-          <span class="price-unit">so'm</span>
-        </div>
-        <a href="#" class="card-btn" style="margin-top:38px">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
-    </div>
-
-    <div class="course-card" data-title="Mobil dasturlash" data-price="500000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-mobile-alt"></i></div>
-        <div class="card-title">Mobil dasturlash (Flutter)</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">500 000</span>
-          <span class="price-unit">so'm</span>
-        </div>
-        <span class="discount-pill"><i class="fas fa-tag"></i> 30% chegirma</span>
-        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
-    </div>
-
-    <div class="course-card" data-title="Video montaj" data-price="160000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-film"></i></div>
-        <div class="card-title">Video montaj (Premiere Pro)</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">160 000</span>
-          <span class="price-unit">so'm</span>
-        </div>
-        <a href="#" class="card-btn" style="margin-top:38px">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
-    </div>
-
-    <div class="course-card" data-title="Biznes va tadbirkorlik" data-price="390000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-briefcase"></i></div>
-        <div class="card-title">Biznes va Tadbirkorlik asoslari</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">390 000</span>
-          <span class="price-unit">so'm</span>
-        </div>
-        <span class="discount-pill"><i class="fas fa-tag"></i> 10% chegirma</span>
-        <a href="#" class="card-btn">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
-    </div>
-
-    <div class="course-card" data-title="3D modellashtirish" data-price="320000">
-      <div class="card-accent"></div>
-      <div class="card-top">
-        <div class="card-icon"><i class="fas fa-cube"></i></div>
-        <div class="card-title">3D Modellashtirish (Blender)</div>
-      </div>
-      <div class="card-body">
-        <div class="price-row">
-          <span class="price-main">320 000</span>
-          <span class="price-unit">so'm</span>
-        </div>
-        <a href="#" class="card-btn" style="margin-top:38px">Batafsil ko'rish <i class="fas fa-arrow-right" style="margin-left:6px;font-size:.8rem"></i></a>
-      </div>
-    </div>
-
-  </div><!-- /grid -->
-</div><!-- /wrap -->
+    {% endfor %}
+</div>
 
 <script>
   function filterCourses() {

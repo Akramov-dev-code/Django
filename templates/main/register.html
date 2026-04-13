@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ro'yxatdan o'tish — Abdulloh-boy Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root { --ink: #0f0e17; --paper: #fffcf5; --gold: #e8a020; --amber: #f5c842; }
+        body { background: var(--paper); font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        
+        .auth-card { background: #fff; width: 100%; max-width: 420px; padding: 40px; border-radius: 24px; box-shadow: 0 20px 60px rgba(15,14,23,0.08); border: 1px solid rgba(232,160,32,0.1); }
+        .auth-head { text-align: center; margin-bottom: 30px; }
+        .auth-head h1 { font-family: 'Syne', sans-serif; font-size: 1.8rem; margin-bottom: 8px; color: var(--ink); }
+        .auth-head p { color: #7a7060; font-size: 0.9rem; }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85rem; color: var(--ink); text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-input { width: 100%; padding: 13px 16px; border: 1.5px solid #e8e2d6; border-radius: 12px; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(232,160,32,0.1); }
+
+        .auth-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 15px; border-radius: 12px; font-size: 1rem; font-weight: 700; font-family: 'Syne', sans-serif; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .auth-btn:hover { background: #2a2840; transform: translateY(-2px); }
+
+        .auth-footer { text-align: center; margin-top: 25px; font-size: 0.9rem; color: #7a7060; }
+        .auth-footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+        .messages { list-style: none; padding: 0; margin-bottom: 20px; }
+        .message { padding: 12px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 10px; }
+        .message.error { background: #fff0f0; color: #e53e3e; border: 1px solid #feb2b2; }
+        .message.warning { background: #fffdf0; color: #8a6d3b; border: 1px solid #faebcc; }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <div class="auth-head">
+            <h1>Akkount yaratish</h1>
+            <p>Academy’ga a'zo bo'ling va bilimlarni o'rganing</p>
+        </div>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="message {{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" class="form-input" placeholder="abdulloh_01" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-input" placeholder="misol@gmail.com" required>
+            </div>
+            <div class="form-group">
+                <label>Parol</label>
+                <input type="password" name="password1" class="form-input" placeholder="••••••••" required>
+            </div>
+            <div class="form-group">
+                <label>Parolni tasdiqlash</label>
+                <input type="password" name="password2" class="form-input" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="auth-btn">Ro'yxatdan o'tish</button>
+        </form>
+
+        <div class="auth-footer">
+            Profilingiz bormi? <a href="{% url 'login' %}">Kirish</a>
+        </div>
+    </div>
+</body>
+</html>

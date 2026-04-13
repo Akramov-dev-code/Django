@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard — Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root { --ink: #0f0e17; --paper: #fffcf5; --gold: #e8a020; --muted: #7a7060; }
+        body { background: var(--paper); font-family: 'DM Sans', sans-serif; margin: 0; padding: 40px; }
+        .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        h1 { font-family: 'Syne', sans-serif; }
+        
+        .card { background: #fff; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid rgba(232,160,32,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--ink); color: #fff; text-align: left; padding: 15px 20px; font-family: 'Syne', sans-serif; font-size: 0.9rem; }
+        td { padding: 15px 20px; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+        tr:hover { background: #fffdf8; }
+        
+        .badge { background: #fdf3dc; color: #7a5800; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-right: 5px; }
+        
+        .btn { padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: 0.2s; display: inline-block; }
+        .btn-edit { background: #fdf3dc; color: var(--gold); border: 1px solid var(--gold); }
+        .btn-delete { background: #fff0f0; color: #e53e3e; border: 1px solid #feb2b2; margin-left: 5px; }
+        .btn-edit:hover { background: var(--gold); color: #fff; }
+        .btn-delete:hover { background: #e53e3e; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="head">
+        <h1>O'quvchilar <span>Paneli</span></h1>
+        <a href="{% url 'index' %}" style="color: var(--muted); text-decoration: none;"><i class="fas fa-external-link-alt"></i> Saytga qaytish</a>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>F.I.SH</th>
+                    <th>Telefon</th>
+                    <th>Telegram</th>
+                    <th>Kurslari</th>
+                    <th>Amallar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>#{{ student.id }}</td>
+                    <td style="font-weight: 600;">{{ student.name }}</td>
+                    <td>{{ student.phone }}</td>
+                    <td><span style="color: var(--muted)">{{ student.username }}</span></td>
+                    <td>
+                        {% for course in student.courses.all %}
+                            <span class="badge">{{ course.title }}</span>
+                        {% empty %}
+                            <span style="color: #ccc;">Kurs yo'q</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_student' student.pk %}" class="btn btn-edit"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'delete_student' student.pk %}" onclick="return confirm('Rostdan ham o\'chirmoqchimisiz?')" class="btn btn-delete"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{% url 'add_student' %}" class="float-btn" title="Yangi o'quvchi qo'shish">
+    <i class="fas fa-plus"></i>
+</a>
+
+<style>
+    .float-btn {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        width: 60px;
+        height: 60px;
+        background: var(--ink);
+        color: var(--gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 2px solid var(--gold);
+        z-index: 1000;
+    }
+
+    .float-btn:hover {
+        transform: scale(1.1) rotate(90deg);
+        background: var(--gold);
+        color: var(--ink);
+    }
+</style>
+
+</body>
+</html>

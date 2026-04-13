@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course.title }} — Abdulloh-boy Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --ink: #0f0e17; --paper: #fffcf5; --gold: #e8a020; --muted: #7a7060;
+        }
+        body { background: var(--paper); font-family: 'DM Sans', sans-serif; color: var(--ink); margin: 0; }
+        .container { max-width: 1000px; margin: 60px auto; padding: 0 24px; }
+        
+        .detail-card {
+            background: #fff; border-radius: 24px; display: grid; grid-template-columns: 1fr 1fr;
+            overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.05); border: 1px solid rgba(232,160,32,0.1);
+        }
+        @media (max-width: 768px) { .detail-card { grid-template-columns: 1fr; } }
+
+        .image-side { background: var(--ink); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 8rem; }
+        
+        .content-side { padding: 40px; }
+        .category { color: var(--gold); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; }
+        h1 { font-family: 'Syne', sans-serif; font-size: 2.5rem; margin: 15px 0; }
+        .description { color: var(--muted); line-height: 1.8; margin-bottom: 30px; }
+        
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .info-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        .info-item i { color: var(--gold); }
+
+        .price-box {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #fdf3dc; padding: 20px; border-radius: 16px; margin-top: auto;
+        }
+        .price-val { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
+        .buy-btn {
+            background: var(--ink); color: #fff; padding: 15px 30px; border-radius: 12px;
+            text-decoration: none; font-weight: 700; transition: 0.3s;
+        }
+        .buy-btn:hover { transform: translateY(-3px); background: #2a2840; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'index' %}" style="text-decoration: none; color: var(--muted); margin-bottom: 20px; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Orqaga qaytish
+        </a>
+        
+        <div class="detail-card">
+            <div class="image-side">
+                <i class="{{ course.icon_class }}"></i>
+            </div>
+            <div class="content-side">
+                <div class="category">Premium Kurs</div>
+                <h1>{{ course.title }}</h1>
+                <p class="description">
+                    Ushbu kurs davomida siz sohaning eng muhim texnologiyalarini noldan professional darajagacha o'rganasiz. 
+                    Kurs amaliy loyihalar va Abdulloh-boy Academy mutaxassislari ko'magi bilan boyitilgan.
+                </p>
+                
+                <div class="info-grid">
+                    <div class="info-item"><i class="fas fa-clock"></i> 24 soat video</div>
+                    <div class="info-item"><i class="fas fa-infinity"></i> Umrbod kirish</div>
+                    <div class="info-item"><i class="fas fa-certificate"></i> Sertifikat</div>
+                    <div class="info-item"><i class="fas fa-user-tie"></i> Mentor yordami</div>
+                </div>
+
+                <div class="price-box">
+                    <div class="price-val">{{ course.price }} <span style="font-size: 1rem; font-weight: 400;">so'm</span></div>
+                    <a href="{% url 'checkout' course.pk %}" class="buy-btn">Ro'yxatdan utish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

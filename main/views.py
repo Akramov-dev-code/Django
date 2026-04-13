@@ -1,11 +1,16 @@
-from django.shortcuts import render, redirect
-from main.models import Course
+from django.shortcuts import render, redirect,get_object_or_404
+from main.models import Course,Students
 from django.http import HttpRequest
 import requests
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
+from django.contrib.auth import logout # Buni tepaga qo'shing
 
+def logout_view(request):
+    logout(request)
+    messages.info(request, "Tizimdan chiqdingiz.")
+    return redirect('index')
 
 TOKEN = "8553368129:AAEBEtfmX-MCwYwngB-v6I3rpqAfq7Kv5UM"
 CHAT_ID = "-1003813831969"
@@ -67,6 +72,8 @@ def login_view(request: HttpRequest):
 
 
 def index_view(request: HttpRequest):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.method == "POST":
         course_name = request.POST.get("course_name", "Unknown")
         course_price = request.POST.get("course_price", 0)
@@ -110,15 +117,91 @@ def index_view(request: HttpRequest):
 
 
 def course_detail(request, pk):
-    try:
-        course = Course.objects.get(id=pk)
-    except Exception as err:
-        course = None
-    context = {
-        "course": course
-    }
-    return render(request, "main/course_detail.html", context)
+    course = get_object_or_404(Course, pk=pk)
+    return render(request, 'main/product_detail.html', {'course': course})
 
-
+def checkout(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    
+    if request.method == "POST":
+        full_name = request.POST.get("full_name") # HTML dagi name="full_name" bo'lishi kerak
+        phone = request.POST.get("phone")        # HTML dagi name="phone"
+        telegram = request.POST.get("telegram")  # HTML dagi name="telegram"
+        
+        # 1. Talabani yaratish
+        student = Students.objects.create(
+            name=full_name,
+            phone=phone,
+            username=telegram
+        )
+        
+        # 2. Talabani tanlangan kursga qo'shish (ManyToManyField)
+        student.courses.add(course)
+        
+        # 3. Telegramga xabar yuborish (Sotib olingani haqida)
+        msg_url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+        text = (f"🔥 Yangi o'quvchi kursga yozildi!\n\n"
+                f"📚 Kurs: {course.title}\n"
+                f"👤 O'quvchi: {full_name}\n"
+                f"📞 Tel: {phone}\n"
+                f"✈️ Telegram: {telegram}")
+        
+        requests.get(msg_url, params={"chat_id": CHAT_ID, "text": text})
+        
+        messages.success(request, "Tabriklaymiz! Siz kursga muvaffaqiyatli yozildingiz.")
+        return redirect('index')
+        
+    return render(request, 'main/checkout.html', {'course': course})
 def about_developer(request):
     return render(request, "main/about.html")
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Students, Course
+
+# Dashboard - barcha o'quvchilar ro'yxati
+def dashboard(request):
+    students = Students.objects.all().order_by('-created_at')
+    return render(request, 'main/dashboard.html', {'students': students})
+
+# O'quvchini o'chirish
+def delete_student(request, pk):
+    student = get_object_or_404(Students, pk=pk)
+    student.delete()
+    return redirect('dashboard')
+
+# O'quvchini tahrirlash
+def edit_student(request, pk):
+    student = get_object_or_404(Students, pk=pk)
+    courses = Course.objects.all()
+    
+    if request.method == "POST":
+        student.name = request.POST.get('name')
+        student.phone = request.POST.get('phone')
+        student.username = request.POST.get('telegram')
+        # ManyToMany kurslarni yangilash
+        selected_courses = request.POST.getlist('courses')
+        student.courses.set(selected_courses)
+        
+        student.save()
+        return redirect('dashboard')
+        
+    return render(request, 'main/edit_student.html', {
+        'student': student,
+        'courses': courses
+    })
+def add_student(request):
+    courses = Course.objects.all()
+    if request.method == "POST":
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        telegram = request.POST.get('telegram')
+        selected_courses = request.POST.getlist('courses')
+        
+        student = Students.objects.create(
+            name=name,
+            phone=phone,
+            username=telegram
+        )
+        student.courses.set(selected_courses)
+        return redirect('dashboard')
+        
+    return render(request, 'main/edit_student.html', {'courses': courses, 'add_mode': True})

@@ -1,0 +1,28 @@
+<div class="form-box">
+    <h2>{% if add_mode %}Yangi o'quvchi qo'shish{% else %}Tahrirlash{% endif %}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label>Ism</label>
+        <input type="text" name="name" value="{% if not add_mode %}{{ student.name }}{% endif %}" required>
+        
+        <label>Telefon</label>
+        <input type="text" name="phone" value="{% if not add_mode %}{{ student.phone }}{% endif %}" required>
+        
+        <label>Telegram</label>
+        <input type="text" name="telegram" value="{% if not add_mode %}{{ student.username }}{% endif %}">
+        
+        <label>Kurslarni tanlang</label>
+        <select name="courses" multiple style="height: 120px;">
+            {% for course in courses %}
+                <option value="{{ course.id }}" {% if student and course in student.courses.all %}selected{% endif %}>
+                    {{ course.title }}
+                </option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit" class="save-btn">
+            {% if add_mode %}Saqlash{% else %}O'zgarishlarni saqlash{% endif %}
+        </button>
+        <a href="{% url 'dashboard' %}" style="display:block; text-align:center; margin-top:15px; color:var(--muted); text-decoration:none;">Bekor qilish</a>
+    </form>
+</div>

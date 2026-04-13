@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirish — Abdulloh-boy Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* CSS bir xil bo'lgani uchun Register CSS'ini ishlatsa bo'ladi */
+        :root { --ink: #0f0e17; --paper: #fffcf5; --gold: #e8a020; }
+        body { background: var(--paper); font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .auth-card { background: #fff; width: 100%; max-width: 400px; padding: 45px; border-radius: 24px; box-shadow: 0 20px 60px rgba(15,14,23,0.08); border: 1px solid rgba(232,160,32,0.1); }
+        .auth-head { text-align: center; margin-bottom: 35px; }
+        .auth-head h1 { font-family: 'Syne', sans-serif; font-size: 2rem; color: var(--ink); margin-bottom: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85rem; color: var(--ink); }
+        .form-input { width: 100%; padding: 14px; border: 1.5px solid #e8e2d6; border-radius: 12px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-input:focus { border-color: var(--gold); }
+        .auth-btn { width: 100%; background: var(--ink); color: #fff; border: none; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .auth-btn:hover { background: #2a2840; }
+        .auth-footer { text-align: center; margin-top: 25px; font-size: 0.9rem; }
+        .auth-footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+        .message.error { background: #fff0f0; color: #e53e3e; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.85rem; border: 1px solid #feb2b2; }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <div class="auth-head">
+            <h1>Xush kelibsiz!</h1>
+            <p style="color: #7a7060;">Akademiya profiliga kiring</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" class="form-input" placeholder="Usernameingizni kiriting" required>
+            </div>
+            <div class="form-group">
+                <label>Parol</label>
+                <input type="password" name="password" class="form-input" placeholder="Parolingizni kiriting" required>
+            </div>
+            <button type="submit" class="auth-btn">Tizimga kirish</button>
+        </form>
+
+        <div class="auth-footer">
+            Hali ro'yxatdan o'tmaganmisiz? <a href="{% url 'register' %}">Ro'yxatdan o'tish</a>
+        </div>
+    </div>
+</body>
+</html>

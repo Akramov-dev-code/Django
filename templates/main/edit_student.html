@@ -1,0 +1,32 @@
+<style>
+    /* Dashboard stilini ishlatsa bo'ladi */
+    .form-box { max-width: 500px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    input, select { width: 100%; padding: 12px; margin: 10px 0 20px; border: 1px solid #ddd; border-radius: 10px; }
+    .save-btn { width: 100%; background: var(--ink); color: #fff; padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; }
+</style>
+
+<div class="form-box">
+    <h2>O'quvchini tahrirlash</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label>Ism</label>
+        <input type="text" name="name" value="{{ student.name }}">
+        
+        <label>Telefon</label>
+        <input type="text" name="phone" value="{{ student.phone }}">
+        
+        <label>Telegram</label>
+        <input type="text" name="telegram" value="{{ student.username }}">
+        
+        <label>Kurslarni tanlang (Ctrl bosib turing)</label>
+        <select name="courses" multiple style="height: 100px;">
+            {% for course in courses %}
+                <option value="{{ course.id }}" {% if course in student.courses.all %}selected{% endif %}>
+                    {{ course.title }}
+                </option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit" class="save-btn">O'zgarishlarni saqlash</button>
+    </form>
+</div>
